@@ -64,19 +64,21 @@ export default function LoginCard() {
         <div className="mx-auto mb-6">
           <Image src="/images/logo.png" alt="Logo" width={64} height={64} className="rounded-full" />
         </div>
-        <CardTitle className="text-2xl font-bold text-text1">管理者ログイン</CardTitle>
-        <CardDescription className="text-text2 pt-1">管理者アカウントでログインしてください。</CardDescription>
+        <CardTitle className="text-xl sm:text-2xl font-bold text-text1">管理者ログイン</CardTitle>
+        <CardDescription className="text-sm sm:text-base text-text2 pt-1">
+          管理者アカウントでログインしてください。
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         {error && (
           <Alert variant="destructive" className="bg-red-900/20 border-red-900 text-red-300">
             <AlertTriangle className="h-4 w-4 mr-2" />
-            <AlertDescription>{error}</AlertDescription>
+            <AlertDescription className="text-xs sm:text-sm">{error}</AlertDescription>
           </Alert>
         )}
         <form onSubmit={handleLogin} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-text2">
+            <Label htmlFor="email" className="text-xs sm:text-sm text-text2">
               メールアドレス
             </Label>
             <Input
@@ -91,7 +93,7 @@ export default function LoginCard() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-text2">
+            <Label htmlFor="password" className="text-xs sm:text-sm text-text2">
               パスワード
             </Label>
             <div className="relative">

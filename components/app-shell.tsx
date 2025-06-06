@@ -61,7 +61,7 @@ export default function AppShell({ children }: AppShellProps) {
                     }`}
                   >
                     <link.icon className="h-4 w-4" />
-                    <span>{link.label}</span>
+                    <span className="text-sm">{link.label}</span>
                   </Link>
                 ))}
               </div>

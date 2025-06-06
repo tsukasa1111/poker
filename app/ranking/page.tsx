@@ -281,7 +281,7 @@ export default function RankingPage() {
     }
     return (
       <div className="space-y-1">
-        <div className="text-xs text-text2 mb-3 px-1 opacity-80">
+        <div className="text-xs sm:text-sm md:text-base text-text2 mb-3 px-1 opacity-80">
           <p>
             ※ ランキングチップは{selectedYear}年{activeTab === "monthly" ? monthNames[selectedMonth - 1] : ""}
             の獲得チップ数を表しています
@@ -310,7 +310,7 @@ export default function RankingPage() {
                 )}
               </div>
               <div className="ml-3">
-                <span className="font-medium text-base text-text1">
+                <span className="font-medium text-sm sm:text-base text-text1">
                   {formatUsername(entry.username, entry.displayName)}
                 </span>
                 {entry.displayName && (
@@ -322,7 +322,7 @@ export default function RankingPage() {
             </div>
             <div className="flex flex-col items-end">
               <motion.span
-                className={`font-mono text-lg font-bold ${index < 3 ? "text-gold" : "text-accent"}`}
+                className={`font-mono text-base sm:text-lg font-bold ${index < 3 ? "text-gold" : "text-accent"}`}
                 initial={{ opacity: 1, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1, filter: showNumbers ? "blur(0px)" : "blur(4px)" }}
                 transition={{ duration: 0.5 }}

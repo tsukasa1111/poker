@@ -73,7 +73,7 @@ export function UserProfileTab({ user, onUserUpdated }: UserProfileTabProps) {
           {" "}
           {/* shrink-0 を追加 */}
           <AlertTriangle className="h-4 w-4 mr-2" />
-          <AlertDescription>{error}</AlertDescription>
+          <AlertDescription className="text-xs sm:text-sm">{error}</AlertDescription>
         </Alert>
       )}
       {success && (
@@ -81,7 +81,7 @@ export function UserProfileTab({ user, onUserUpdated }: UserProfileTabProps) {
           {" "}
           {/* shrink-0 を追加 */}
           <CheckCircle className="h-4 w-4 mr-2" />
-          <AlertDescription>{success}</AlertDescription>
+          <AlertDescription className="text-xs sm:text-sm">{success}</AlertDescription>
         </Alert>
       )}
       <form onSubmit={handleProfileUpdate} className="space-y-4 flex flex-col flex-grow">

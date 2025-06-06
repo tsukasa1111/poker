@@ -43,7 +43,7 @@ export function SectionCard({
         ${className}
       `}
     >
-      <h2 className="text-lg md:text-xl font-semibold mb-4 font-heading text-text1 border-b border-zinc-700/50 pb-3 flex items-center justify-between">
+      <h2 className="text-base sm:text-lg md:text-xl font-semibold mb-4 font-heading text-text1 border-b border-zinc-700/50 pb-3 flex items-center justify-between">
         {title}
       </h2>
       <div className="space-y-4">{children}</div>

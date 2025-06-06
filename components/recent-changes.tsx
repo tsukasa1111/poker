@@ -54,7 +54,7 @@ export function RecentChanges() {
   return (
     <SectionCard title="最近のチップ変更">
       {loading ? (
-        <div className="py-4 text-center text-text2">読み込み中...</div>
+        <div className="py-4 text-center text-xs sm:text-sm text-text2">読み込み中...</div>
       ) : changes.length > 0 ? (
         <ul className="space-y-2">
           {changes.map((change, index) => (
@@ -63,11 +63,13 @@ export function RecentChanges() {
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.2, delay: index * 0.05 }}
-              className="flex justify-between items-center text-sm py-2 border-b border-surface2 last:border-0"
+              className="flex justify-between items-center text-xs sm:text-sm py-2 border-b border-surface2 last:border-0"
             >
               <span className="text-text2">{format(change.timestamp, "MM/dd HH:mm", { locale: ja })}</span>
-              <span className="font-medium">{change.username}</span>
-              <span className={`font-mono ${change.type === "add" ? "text-green-400" : "text-red-400"}`}>
+              <span className="text-sm sm:text-base font-medium">{change.username}</span>
+              <span
+                className={`text-sm sm:text-base font-mono ${change.type === "add" ? "text-green-400" : "text-red-400"}`}
+              >
                 {change.type === "add" ? "+" : "-"}
                 {change.changeAmount.toLocaleString()}
               </span>

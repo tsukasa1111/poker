@@ -50,9 +50,9 @@ export function MiniRanking() {
   return (
     <SectionCard title="月間ランキング">
       {loading ? (
-        <div className="py-4 text-center text-text2">読み込み中...</div>
+        <div className="py-4 text-center text-text2 text-xs sm:text-sm">読み込み中...</div>
       ) : error ? (
-        <div className="py-4 text-center text-red-400">{error}</div>
+        <div className="py-4 text-center text-red-400 text-xs sm:text-sm">{error}</div>
       ) : ranking.length > 0 ? (
         <ul className="space-y-1">
           {ranking.map((entry, index) => (
@@ -67,10 +67,10 @@ export function MiniRanking() {
                 <div className="w-8 flex justify-center">
                   <Trophy className={`h-4 w-4 ${getTrophyColor(entry.rank)}`} />
                 </div>
-                <span className="font-medium">{entry.displayName || entry.username}</span>
+                <span className="text-sm sm:text-base font-medium">{entry.displayName || entry.username}</span>
               </div>
               <motion.span
-                className="font-mono text-accent2 font-bold"
+                className="text-base sm:text-lg font-mono text-accent2 font-bold"
                 initial={{ opacity: 1, scale: 0.8 }}
                 animate={{
                   opacity: 1,

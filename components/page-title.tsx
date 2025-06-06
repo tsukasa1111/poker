@@ -17,8 +17,8 @@ export function PageTitle({ title, description, children }: PageTitleProps) {
       transition={{ duration: 0.3 }}
       className="mb-8"
     >
-      <h1 className="text-3xl md:text-4xl font-bold font-heading mb-2">{title}</h1>
-      {description && <p className="text-text2 text-lg">{description}</p>}
+      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold font-heading mb-2">{title}</h1>
+      {description && <p className="text-text2 text-base sm:text-lg">{description}</p>}
       {children}
     </motion.div>
   )

@@ -130,7 +130,7 @@ export default function HomePage() {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
               <DynamicHeadline />
 
-              <p className="mt-6 text-lg text-zinc-300 leading-relaxed max-w-2xl mx-auto">
+              <p className="mt-6 text-base sm:text-lg text-zinc-300 leading-relaxed max-w-2xl mx-auto">
                 PokerChipManagerは増減履歴を自動追跡し、
                 <br />
                 ランキングをリアルタイム更新。
@@ -194,7 +194,7 @@ export default function HomePage() {
                   </svg>
                 </div>
                 <h4 className="text-xl font-bold mb-3 font-heading">チップ管理</h4>
-                <p className="text-zinc-300">
+                <p className="text-sm sm:text-base text-zinc-300">
                   プレイヤーのチップ残高をリアルタイムで追跡し、増減履歴を記録。即座に残高が更新され、取引履歴も確認できます。
                 </p>
               </motion.div>
@@ -223,7 +223,7 @@ export default function HomePage() {
                   </svg>
                 </div>
                 <h4 className="text-xl font-bold mb-3 font-heading">ランキング</h4>
-                <p className="text-zinc-300">
+                <p className="text-sm sm:text-base text-zinc-300">
                   月間・年間のランキングを自動生成し、トッププレイヤーを表示。競争を促進し、プレイヤーのモチベーションを高めます。
                 </p>
               </motion.div>
@@ -252,7 +252,7 @@ export default function HomePage() {
                   </svg>
                 </div>
                 <h4 className="text-xl font-bold mb-3 font-heading">統計分析</h4>
-                <p className="text-zinc-300">
+                <p className="text-sm sm:text-base text-zinc-300">
                   プレイヤーの成績を分析し、トレンドやパターンを可視化。データに基づいた運営判断をサポートします。
                 </p>
               </motion.div>
@@ -262,7 +262,7 @@ export default function HomePage() {
       </main>
 
       <footer className="container mx-auto px-4 py-8 text-center text-zinc-500 border-t border-zinc-800 relative z-10">
-        <p>© {new Date().getFullYear()} PokerChipManager. All rights reserved.</p>
+        <p className="text-xs sm:text-sm">© {new Date().getFullYear()} PokerChipManager. All rights reserved.</p>
       </footer>
     </div>
   )

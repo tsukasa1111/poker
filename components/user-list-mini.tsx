@@ -24,6 +24,7 @@ import {
   RefreshCw,
   SlidersHorizontal,
   RotateCcw,
+  Check,
 } from "lucide-react"
 import { ChipManagementModal } from "./chip-management-modal"
 import { convertToCSV, formatJSON, downloadFile, generateFileName, downloadFileAlternative } from "@/lib/export-utils"
@@ -47,7 +48,9 @@ export default function UserListMini({ onUserAdded }: UserListMiniProps) {
   const [isOnline, setIsOnline] = useState(true)
   const [showExportMenu, setShowExportMenu] = useState(false)
   const [showFiltersMenu, setShowFiltersMenu] = useState(false)
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
+  const [currentSortCriterion, setCurrentSortCriterion] = useState<
+    "chips_desc" | "chips_asc" | "updated_at_desc" | "updated_at_asc"
+  >("chips_desc") // デフォルトはチップ数が多い順
 
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const [isChipModalOpen, setIsChipModalOpen] = useState(false)
@@ -138,9 +141,23 @@ export default function UserListMini({ onUserAdded }: UserListMiniProps) {
           (user.displayName && user.displayName.toLowerCase().includes(searchTerm.toLowerCase())),
       )
     }
-    result.sort((a, b) => (sortOrder === "asc" ? a.chips - b.chips : b.chips - a.chips))
+
+    result.sort((a, b) => {
+      if (currentSortCriterion === "chips_desc") {
+        return b.chips - a.chips
+      } else if (currentSortCriterion === "chips_asc") {
+        return a.chips - b.chips
+      } else if (currentSortCriterion === "updated_at_desc") {
+        // updatedAtが未定義の場合は0として扱い、新しい順（降順）に並べる
+        return (b.updatedAt || 0) - (a.updatedAt || 0)
+      } else if (currentSortCriterion === "updated_at_asc") {
+        // updatedAtが未定義の場合は0として扱い、古い順（昇順）に並べる
+        return (a.updatedAt || 0) - (b.updatedAt || 0)
+      }
+      return 0 // 発生しないはず
+    })
     return result
-  }, [searchTerm, users, sortOrder])
+  }, [searchTerm, users, currentSortCriterion])
 
   const handleUserClick = (user: User) => {
     setSelectedUser(user)
@@ -199,9 +216,19 @@ export default function UserListMini({ onUserAdded }: UserListMiniProps) {
     }
   }
 
-  const toggleSortOrder = () => {
-    setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"))
-    toast.success(`チップ数を${sortOrder === "asc" ? "多い順" : "少ない順"}に並べ替えました`)
+  const handleSortChange = (criterion: typeof currentSortCriterion) => {
+    setCurrentSortCriterion(criterion)
+    toast.success(
+      `ユーザーを${
+        criterion === "chips_desc"
+          ? "チップ数が多い順"
+          : criterion === "chips_asc"
+            ? "チップ数が少ない順"
+            : criterion === "updated_at_desc"
+              ? "更新時間が新しい順"
+              : "更新時間が古い順"
+      }に並べ替えました`,
+    )
     setShowFiltersMenu(false)
   }
 
@@ -281,7 +308,7 @@ export default function UserListMini({ onUserAdded }: UserListMiniProps) {
             >
               <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
             </Button>
-            <div className="relative" data-filters-menu>
+            <div className="relative hidden sm:block" data-filters-menu>
               <Button
                 variant="outline"
                 size="sm"
@@ -295,15 +322,36 @@ export default function UserListMini({ onUserAdded }: UserListMiniProps) {
               </Button>
               {showFiltersMenu && (
                 <div className="absolute mt-1 w-full max-w-xs rounded-md shadow-lg bg-popover border border-border z-50 left-1/2 -translate-x-1/2 sm:w-56 sm:left-auto sm:right-0">
-                  {" "}
-                  {/* ここを修正しました */}
                   <div className="py-1">
                     <button
-                      onClick={toggleSortOrder}
+                      onClick={() => handleSortChange("chips_desc")}
                       className="flex items-center w-full px-4 py-2 text-sm text-left hover:bg-accent hover:text-accent-foreground"
                     >
-                      <span>チップ数: {sortOrder === "asc" ? "少ない順" : "多い順"}</span>
+                      <span>チップ数: 多い順</span>
+                      {currentSortCriterion === "chips_desc" && <Check className="ml-auto h-4 w-4" />}
                     </button>
+                    <button
+                      onClick={() => handleSortChange("chips_asc")}
+                      className="flex items-center w-full px-4 py-2 text-sm text-left hover:bg-accent hover:text-accent-foreground"
+                    >
+                      <span>チップ数: 少ない順</span>
+                      {currentSortCriterion === "chips_asc" && <Check className="ml-auto h-4 w-4" />}
+                    </button>
+                    <button
+                      onClick={() => handleSortChange("updated_at_desc")}
+                      className="flex items-center w-full px-4 py-2 text-sm text-left hover:bg-accent hover:text-accent-foreground"
+                    >
+                      <span>更新時間: 新しい順</span>
+                      {currentSortCriterion === "updated_at_desc" && <Check className="ml-auto h-4 w-4" />}
+                    </button>
+                    <button
+                      onClick={() => handleSortChange("updated_at_asc")}
+                      className="flex items-center w-full px-4 py-2 text-sm text-left hover:bg-accent hover:text-accent-foreground"
+                    >
+                      <span>更新時間: 古い順</span>
+                      {currentSortCriterion === "updated_at_asc" && <Check className="ml-auto h-4 w-4" />}
+                    </button>
+                    <div className="my-1 h-px bg-border" /> {/* 区切り線 */}
                     <button
                       onClick={handleClearCacheAndRefresh}
                       className="flex items-center w-full px-4 py-2 text-sm text-left hover:bg-accent hover:text-accent-foreground"
@@ -315,7 +363,7 @@ export default function UserListMini({ onUserAdded }: UserListMiniProps) {
                 </div>
               )}
             </div>
-            <div className="relative" data-export-menu>
+            <div className="relative hidden sm:block" data-export-menu>
               <Button
                 variant="outline"
                 size="sm"
@@ -329,8 +377,6 @@ export default function UserListMini({ onUserAdded }: UserListMiniProps) {
               </Button>
               {showExportMenu && (
                 <div className="absolute mt-1 w-full max-w-xs rounded-md shadow-lg bg-popover border border-border z-50 left-1/2 -translate-x-1/2 sm:w-56 sm:left-auto sm:right-0">
-                  {" "}
-                  {/* ここを修正しました */}
                   <div className="py-1">
                     <button
                       onClick={exportAsCSV}
@@ -355,7 +401,6 @@ export default function UserListMini({ onUserAdded }: UserListMiniProps) {
       }
       hoverable
     >
-      {/* ... (残りのコンテンツは変更なし) ... */}
       <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2 mb-4">
         <div className="relative flex-1">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-text2" />
@@ -376,7 +421,7 @@ export default function UserListMini({ onUserAdded }: UserListMiniProps) {
       {error && (
         <Alert variant="destructive" className="mb-4 bg-red-900/20 border-red-900 text-red-300">
           <AlertTriangle className="h-4 w-4 mr-2" />
-          <AlertDescription>{error}</AlertDescription>
+          <AlertDescription className="text-xs sm:text-sm">{error}</AlertDescription>
         </Alert>
       )}
 
@@ -384,13 +429,13 @@ export default function UserListMini({ onUserAdded }: UserListMiniProps) {
         <div className="py-8 text-center">
           <div className="inline-block animate-pulse-custom">
             <RefreshCw className="h-8 w-8 mx-auto mb-2 opacity-70 animate-spin" />
-            <p className="text-text2">読み込み中...</p>
+            <p className="text-sm text-text2">読み込み中...</p>
           </div>
         </div>
       ) : error && (!users || users.length === 0) ? (
         <div className="text-center py-8 text-red-400">
           <ServerCrash className="h-12 w-12 mx-auto mb-2 opacity-70" />
-          <p>データ取得エラーが発生しました</p>
+          <p className="text-sm">データ取得エラーが発生しました</p>
         </div>
       ) : filteredUsers.length > 0 ? (
         <motion.ul
@@ -413,14 +458,18 @@ export default function UserListMini({ onUserAdded }: UserListMiniProps) {
                   <UserIcon className="h-5 w-5 text-text2" />
                 </div>
                 <div className="min-w-0">
-                  <span className="font-medium text-base block truncate">{user.displayName || user.username}</span>
+                  <span className="font-medium text-sm sm:text-base block truncate">
+                    {user.displayName || user.username}
+                  </span>
                   <p className="text-xs text-text2 block truncate">
                     {user.username.startsWith("@") ? user.username : `@${user.username}`}
                   </p>
                 </div>
               </div>
               <div className="flex flex-col items-end ml-2 flex-shrink-0">
-                <span className="font-mono text-accent font-bold text-lg">{user.chips.toLocaleString()}</span>
+                <span className="font-mono text-accent font-bold text-base sm:text-lg">
+                  {user.chips.toLocaleString()}
+                </span>
                 <span className="text-xs text-text2">チップ</span>
               </div>
             </motion.li>

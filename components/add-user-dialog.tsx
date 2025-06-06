@@ -134,7 +134,7 @@ export default function AddUserDialog({ onUserAdded }: { onUserAdded?: () => voi
       <DialogContent className="sm:max-w-[425px] bg-surface1 border-surface2 text-text1">
         <DialogHeader>
           <DialogTitle>新規ユーザー追加</DialogTitle>
-          <DialogDescription className="text-text2">
+          <DialogDescription className="text-sm text-text2">
             新しいユーザーの情報を入力してください。ユーザーIDは後から変更できません。
           </DialogDescription>
         </DialogHeader>
@@ -142,21 +142,23 @@ export default function AddUserDialog({ onUserAdded }: { onUserAdded?: () => voi
         {error && (
           <Alert variant="destructive" className="my-4 bg-red-900/20 border-red-900 text-red-300">
             <AlertTriangle className="h-4 w-4 mr-2" />
-            <AlertDescription>{error}</AlertDescription>
+            <AlertDescription className="text-xs sm:text-sm">{error}</AlertDescription>
           </Alert>
         )}
 
         {success && (
           <Alert className="my-4 bg-green-900/20 border-green-900 text-green-300">
             <CheckCircle className="h-4 w-4 mr-2" />
-            <AlertDescription>{success}</AlertDescription>
+            <AlertDescription className="text-xs sm:text-sm">{success}</AlertDescription>
           </Alert>
         )}
 
         {!success && ( // 成功メッセージ表示時はフォームを隠す
           <form onSubmit={handleSubmit} className="space-y-4 pt-2">
             <div className="space-y-2">
-              <Label htmlFor="username">ユーザーID (必須)</Label>
+              <Label htmlFor="username" className="text-sm">
+                ユーザーID (必須)
+              </Label>
               <Input
                 id="username"
                 ref={usernameInputRef}
@@ -174,7 +176,9 @@ export default function AddUserDialog({ onUserAdded }: { onUserAdded?: () => voi
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="displayName">表示名 (必須)</Label>
+              <Label htmlFor="displayName" className="text-sm">
+                表示名 (必須)
+              </Label>
               <Input
                 id="displayName"
                 placeholder="例：田中太郎"

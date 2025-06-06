@@ -83,7 +83,7 @@ export default function DashboardPage() {
             className="text-center"
           >
             <div className="w-16 h-16 border-4 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-xl text-text2">読み込み中...</p>
+            <p className="text-lg sm:text-xl text-text2">読み込み中...</p>
           </motion.div>
         </div>
       </AppShell>
@@ -104,7 +104,7 @@ export default function DashboardPage() {
         <Alert variant="destructive" className="mb-6 bg-red-900/30 border-red-700/50 text-red-200 p-4 rounded-lg">
           <div className="flex items-center">
             <AlertTriangle className="h-5 w-5 mr-2" />
-            <AlertDescription>{displayError}</AlertDescription>
+            <AlertDescription className="text-xs sm:text-sm">{displayError}</AlertDescription>
           </div>
         </Alert>
       )}

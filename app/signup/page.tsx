@@ -61,14 +61,16 @@ export default function SignupPage() {
       <div className="flex-1 flex items-center justify-center px-4">
         <Card className="w-full max-w-md bg-[#1a1a1a] border-[#333] border">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center">アカウント作成</CardTitle>
-            <CardDescription className="text-center text-gray-400">新しいアカウントを作成してください</CardDescription>
+            <CardTitle className="text-xl sm:text-2xl font-bold text-center">アカウント作成</CardTitle>
+            <CardDescription className="text-sm sm:text-base text-center text-gray-400">
+              新しいアカウントを作成してください
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSignup} className="space-y-4">
               {error && (
                 <Alert variant="destructive" className="bg-red-900/20 border-red-900 text-red-300">
-                  <AlertDescription>{error}</AlertDescription>
+                  <AlertDescription className="text-xs sm:text-sm">{error}</AlertDescription>
                 </Alert>
               )}
               <div className="space-y-2">
@@ -111,12 +113,12 @@ export default function SignupPage() {
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
             <div className="text-center w-full">
-              <Link href="/login" className="text-sm text-gray-400 hover:text-white transition-colors">
+              <Link href="/login" className="text-xs sm:text-sm text-gray-400 hover:text-white transition-colors">
                 すでにアカウントをお持ちの方はこちら
               </Link>
             </div>
             <div className="text-center w-full">
-              <Link href="/" className="text-sm text-gray-400 hover:text-white transition-colors">
+              <Link href="/" className="text-xs sm:text-sm text-gray-400 hover:text-white transition-colors">
                 ホームに戻る
               </Link>
             </div>

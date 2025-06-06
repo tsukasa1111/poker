@@ -34,13 +34,13 @@ export function KpiCard({ label, value, unit, progress, color = "accent", icon }
       className="bg-zinc-900/50 backdrop-blur-md shadow-xl p-5 rounded-xl border border-zinc-800/70 hover:shadow-2xl transition-all duration-300"
     >
       <div className="flex items-start justify-between">
-        <p className="text-text2 text-sm font-medium">{label}</p>
+        <p className="text-text2 text-xs sm:text-sm font-medium">{label}</p>
         {icon && <div className="text-text2 opacity-80">{icon}</div>}
       </div>
 
       <p className={`text-2xl md:text-3xl font-bold mt-2 ${getColorClasses()}`}>
         {displayValue}
-        {unit && <span className="ml-1 text-lg opacity-80">{unit}</span>}
+        {unit && <span className="ml-1 text-sm sm:text-base opacity-80">{unit}</span>}
       </p>
 
       {progress != null && (

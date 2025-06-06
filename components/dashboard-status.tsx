@@ -63,13 +63,15 @@ export function DashboardStatus({ lastUpdated, isLoading = false, onRefresh }: D
   }
 
   return (
-    <div className="flex items-center justify-between w-full bg-surface1/80 backdrop-blur-sm rounded-lg px-4 py-2 shadow-sm">
+    <div className="flex items-center text-xs sm:text-sm text-text2 bg-surface1/80 backdrop-blur-sm rounded-lg px-4 py-2 shadow-sm">
       {/* データ状態インジケーター（クリック不可） */}
-      <div className="flex items-center text-sm text-text2">
+      <div className="flex items-center">
         <Database className="h-4 w-4 mr-2" />
-        <span>保存データ</span>
+        <span className="text-xs sm:text-sm">保存データ</span>
         {lastUpdated && (
-          <span className="ml-2 font-mono">{timeAgo ? `(${timeAgo})` : `(${lastUpdated.toLocaleTimeString()})`}</span>
+          <span className="ml-2 font-mono text-xs sm:text-sm">
+            {timeAgo ? `(${timeAgo})` : `(${lastUpdated.toLocaleTimeString()})`}
+          </span>
         )}
       </div>
 

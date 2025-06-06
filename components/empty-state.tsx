@@ -23,7 +23,7 @@ export function EmptyState({ text, icon }: EmptyStateProps) {
           />
         </svg>
       )}
-      <p className="text-sm">{text}</p>
+      <p className="text-xs sm:text-sm">{text}</p>
     </div>
   )
 }
