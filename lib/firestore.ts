@@ -19,6 +19,11 @@ import {
 } from "firebase/firestore"
 import { db } from "./firebase"
 import { getDataWithCache, updateMemoryCache, clearCache } from "./cache-utils"
+import {
+  recalculateAndStoreMonthlyRanking, // 追加
+  recalculateAndStoreYearlyRanking, // 追加
+} from "./ranking-store"
+import { showToast } from "./toast" // 追加
 
 // User型を定義
 export interface User {
@@ -99,9 +104,8 @@ export const searchUserByUsername = async (username: string, forceRefresh = fals
         Omit<User, "id" | "lastUpdated" | "createdAt"> & { lastUpdated: Timestamp; createdAt: Timestamp }
       >
       const userData = docSnap.data()
-      const userId = docSnap.id
       return {
-        id: userId,
+        id: docSnap.id,
         ...userData,
         lastUpdated: safeToDate(userData.lastUpdated),
         createdAt: safeToDate(userData.createdAt),
@@ -343,6 +347,27 @@ export const updateUserChips = async (
     } catch (cacheError) {
       console.error("[updateUserChips] Cache update error:", cacheError)
     }
+
+    // チップ更新後にランキングを再計算して保存
+    const currentYear = now.getFullYear()
+    const currentMonth = now.getMonth() + 1
+    try {
+      showToast.info("ランキングを更新中: チップ更新に伴いランキングを再計算しています...")
+      const monthlySuccess = await recalculateAndStoreMonthlyRanking(currentYear, currentMonth, staffEmail)
+      const yearlySuccess = await recalculateAndStoreYearlyRanking(currentYear, staffEmail)
+
+      if (monthlySuccess && yearlySuccess) {
+        showToast.success("ランキング更新完了: 月間および年間ランキングが最新の状態に更新されました。")
+      } else {
+        showToast.error("ランキング更新失敗: ランキングの更新中にエラーが発生しました。")
+      }
+    } catch (rankingError) {
+      console.error("チップ更新後のランキング再計算エラー:", rankingError)
+      showToast.error(
+        `ランキング更新エラー: ${rankingError instanceof Error ? rankingError.message : String(rankingError)}`,
+      )
+    }
+
     return true
   } catch (error: any) {
     console.error(
