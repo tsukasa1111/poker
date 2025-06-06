@@ -178,7 +178,7 @@ export default function ChipManagement({
   }
 
   const content = (
-    <div className="space-y-6 py-2 w-full">
+    <div className="space-y-4 py-1 w-full">
       {showSuccessAlert && (
         <Alert
           variant="default"
@@ -196,14 +196,14 @@ export default function ChipManagement({
         <RadioGroup
           value={type}
           onValueChange={(value) => handleTypeChange(value as "add" | "subtract")}
-          className="grid grid-cols-2 gap-2 rounded-lg border border-surface2 bg-surface1 p-1"
+          className="grid grid-cols-2 gap-2 rounded-lg border border-surface2 bg-surface1 p-0.5"
           disabled={isReadOnlyUser || loading || showSuccessAlert}
         >
           <RadioGroupItem value="add" id={`add-${user.id}`} className="sr-only" />
           <Label
             htmlFor={`add-${user.id}`}
             className={cn(
-              "flex items-center justify-center cursor-pointer rounded-md py-2.5 px-4 text-center text-sm font-medium transition-all",
+              "flex items-center justify-center cursor-pointer rounded-md py-2 px-3 text-center text-sm font-medium transition-all",
               type === "add"
                 ? "bg-green-600/20 text-green-300 border border-green-500 shadow-sm"
                 : "text-text2 hover:bg-surface2",
@@ -217,7 +217,7 @@ export default function ChipManagement({
           <Label
             htmlFor={`subtract-${user.id}`}
             className={cn(
-              "flex items-center justify-center cursor-pointer rounded-md py-2.5 px-4 text-center text-sm font-medium transition-all",
+              "flex items-center justify-center cursor-pointer rounded-md py-2 px-3 text-center text-sm font-medium transition-all",
               type === "subtract"
                 ? "bg-red-600/20 text-red-300 border border-red-500 shadow-sm"
                 : "text-text2 hover:bg-surface2",
@@ -240,7 +240,7 @@ export default function ChipManagement({
           inputMode="numeric"
           value={amount}
           onChange={(e) => setAmount(e.target.value.replace(/[^0-9]/g, ""))}
-          className="bg-surface2 border-gray-600 focus:border-accent text-text1 h-12 text-base tabular-nums"
+          className="bg-surface2 border-gray-600 focus:border-accent text-text1 h-10 text-base tabular-nums"
           disabled={isReadOnlyUser || loading || showSuccessAlert}
           min="1"
         />
@@ -256,7 +256,7 @@ export default function ChipManagement({
               type="button"
               variant={selectedPreset === preset.id ? "default" : "outline"}
               className={cn(
-                "h-auto py-3 px-3 text-sm justify-center transition-all duration-150 ease-in-out text-pretty",
+                "h-auto py-2.5 px-2.5 text-sm justify-center transition-all duration-150 ease-in-out text-pretty",
                 selectedPreset === preset.id
                   ? "bg-accent text-accent-foreground ring-2 ring-accent ring-offset-2 ring-offset-surface1 scale-105"
                   : "bg-surface2 border-gray-600 text-text1 hover:bg-surface2/80 hover:border-accent",
@@ -271,7 +271,7 @@ export default function ChipManagement({
             type="button"
             variant={selectedPreset === "custom" ? "default" : "outline"}
             className={cn(
-              "h-auto py-3 px-3 text-sm justify-center transition-all duration-150 ease-in-out col-span-2 text-pretty",
+              "h-auto py-2.5 px-2.5 text-sm justify-center transition-all duration-150 ease-in-out col-span-2 text-pretty",
               selectedPreset === "custom"
                 ? "bg-accent text-accent-foreground ring-2 ring-accent ring-offset-2 ring-offset-surface1 scale-105"
                 : "bg-surface2 border-gray-600 text-text1 hover:bg-surface2/80 hover:border-accent",
@@ -289,7 +289,7 @@ export default function ChipManagement({
             placeholder="具体的な理由を入力してください (必須)"
             value={reason}
             onChange={(e) => setReason(e.target.value)}
-            className="mt-3 bg-surface2 border-gray-600 focus:border-accent text-text1 min-h-[90px] text-base"
+            className="mt-3 bg-surface2 border-gray-600 focus:border-accent text-text1 min-h-[70px] text-base"
             disabled={isReadOnlyUser || loading || showSuccessAlert}
           />
         )}
@@ -298,7 +298,7 @@ export default function ChipManagement({
         <Button
           onClick={handleUpdateChips}
           disabled={isReadOnlyUser || loading || showSuccessAlert || !isFormValid}
-          className="w-full btn-primary h-12 mt-6 text-base font-semibold"
+          className="w-full btn-primary h-10 mt-4 text-base font-semibold"
         >
           {loading ? (
             <div className="flex items-center justify-center">
@@ -358,9 +358,9 @@ export default function ChipManagement({
           </div>
           <div className="text-sm text-text2 font-normal pt-1 sm:pt-0 tabular-nums">ID: {user.username}</div>
         </CardTitle>
-        <CardDescription className="text-text2 pt-2 space-y-1.5">
+        <CardDescription className="pt-1 space-y-1">
           <div className="flex items-center gap-2">
-            <Coins className="h-4 w-4 text-gray-400" />
+            <Coins className="h-3.5 w-3.5 text-gray-400" />
             <span>
               現在の手持ち: <span className="font-semibold text-text1 tabular-nums">{user.chips.toLocaleString()}</span>{" "}
               枚
@@ -368,13 +368,13 @@ export default function ChipManagement({
           </div>
           {user.totalEarnings !== undefined && user.totalEarnings > 0 && (
             <div className="flex items-center gap-2 text-green-400">
-              <TrendingUp className="h-4 w-4" />
+              <TrendingUp className="h-3.5 w-3.5" />
               <span className="tabular-nums">総獲得: {user.totalEarnings.toLocaleString()} 枚</span>
             </div>
           )}
           {user.totalLosses !== undefined && user.totalLosses > 0 && (
             <div className="flex items-center gap-2 text-red-400">
-              <TrendingDown className="h-4 w-4" />
+              <TrendingDown className="h-3.5 w-3.5" />
               <span className="tabular-nums">総損失: {user.totalLosses.toLocaleString()} 枚</span>
             </div>
           )}

@@ -131,9 +131,10 @@ export default function HomePage() {
               <DynamicHeadline />
 
               <p className="mt-6 text-lg text-zinc-300 leading-relaxed max-w-2xl mx-auto">
-                {" "}
-                {/* 中央寄せ */}
-                PokerChipManagerは増減履歴を自動追跡し、ランキングをリアルタイム更新。
+                PokerChipManagerは増減履歴を自動追跡し、
+                <br />
+                ランキングをリアルタイム更新。
+                <br />
                 ポーカーゲームの運営がもっとスマートに。
               </p>
 

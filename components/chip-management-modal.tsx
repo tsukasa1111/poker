@@ -19,13 +19,12 @@ interface ChipManagementModalProps {
 export function ChipManagementModal({ user, isOpen, onClose, onUpdate }: ChipManagementModalProps) {
   const [activeTab, setActiveTab] = useState<string>("chips")
 
-  /*
-  const handleChipUpdate = async () => {
-    if (onUpdate) {
-      await onUpdate()
-    }
-  }
-  */
+  // handleChipUpdate 関数は ChipManagement コンポーネント内で直接モーダルを閉じるロジックを呼び出すため、ここでは不要になりました。
+  // const handleChipUpdate = async () => {
+  //   if (onUpdate) {
+  //     await onUpdate()
+  //   }
+  // }
 
   const handleUserUpdate = () => {
     if (onUpdate) onUpdate()
@@ -35,13 +34,9 @@ export function ChipManagementModal({ user, isOpen, onClose, onUpdate }: ChipMan
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-[700px] w-[95vw] min-h-[580px] max-h-[90vh] overflow-hidden bg-surface1 border-surface2 rounded-lg shadow-lg flex flex-col p-0">
-        {" "}
-        {/* min-h を調整, overflow-hidden に変更 */}
-        <DialogHeader className="space-y-3 pt-6 px-6 pb-4 border-b border-surface2 shrink-0">
-          {" "}
-          {/* shrink-0 を追加 */}
-          <DialogTitle className="text-xl md:text-2xl flex items-center gap-2 text-text1">
+      <DialogContent className="sm:max-w-[500px] w-[95vw] min-h-[400px] max-h-[85vh] overflow-hidden bg-surface1 border-surface2 rounded-lg shadow-lg flex flex-col p-0">
+        <DialogHeader className="space-y-2 pt-3 px-3 pb-2 border-b border-surface2 shrink-0">
+          <DialogTitle className="text-base md:text-lg flex items-center gap-1 text-text1">
             <span className="text-accent">ユーザー管理:</span> {user.displayName || user.username}
           </DialogTitle>
           {user.username && (
@@ -50,17 +45,17 @@ export function ChipManagementModal({ user, isOpen, onClose, onUpdate }: ChipMan
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
-                className="bg-surface2/50 p-3 rounded-md flex items-center justify-between"
+                className="bg-surface2/50 p-1.5 rounded-md flex items-center justify-between"
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-surface2 flex items-center justify-center shadow-sm">
-                    <UserIcon className="h-5 w-5 text-text2" />
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-surface2 flex items-center justify-center shadow-sm">
+                    <UserIcon className="h-3.5 w-3.5 text-text2" />
                   </div>
                   <div>
-                    <div className="text-sm text-text2 tabular-nums">ユーザーID: {user.username}</div>
-                    <div className="flex items-center gap-2">
-                      <Coins className="h-4 w-4 text-gold" />
-                      <span className="font-mono text-gold font-bold text-lg tabular-nums">
+                    <div className="text-xs text-text2 tabular-nums">ユーザーID: {user.username}</div>
+                    <div className="flex items-center gap-1">
+                      <Coins className="h-3 w-3 text-gold" />
+                      <span className="font-mono text-gold font-bold text-sm tabular-nums">
                         {user.chips.toLocaleString()}
                       </span>
                       <span className="text-xs text-text2">チップ</span>
@@ -71,9 +66,9 @@ export function ChipManagementModal({ user, isOpen, onClose, onUpdate }: ChipMan
             </DialogDescription>
           )}
         </DialogHeader>
-        <div className="flex-grow flex flex-col overflow-hidden">
+        <div className="flex-grow flex flex-col overflow-y-auto">
           <Tabs defaultValue="chips" value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-            <TabsList className="grid grid-cols-2 bg-surface2 p-1 rounded-lg mx-6 mt-4 sticky top-0 z-10 shrink-0">
+            <TabsList className="grid grid-cols-2 bg-surface2 p-1 rounded-lg mx-3 mt-2 sticky top-0 z-10 shrink-0">
               <TabsTrigger
                 value="chips"
                 className="data-[state=active]:bg-accent data-[state=active]:text-accent-foreground rounded-md transition-all duration-200 py-2 text-sm"
@@ -90,14 +85,9 @@ export function ChipManagementModal({ user, isOpen, onClose, onUpdate }: ChipMan
               </TabsTrigger>
             </TabsList>
 
-            <div className="tab-content-container flex-grow overflow-y-auto px-6 py-4">
+            <div className="tab-content-container flex-grow overflow-y-auto px-3 py-2">
               <TabsContent value="chips" className="h-full mt-0 border-0 p-0 outline-none w-full">
-                <ChipManagement
-                  user={user}
-                  onUpdate={onUpdate} // 親コンポーネントのデータ更新用 (例: リスト再取得)
-                  onSuccessAndCloseModal={onClose} // モーダルを閉じるためのコールバックを直接渡す
-                  inModal={true}
-                />
+                <ChipManagement user={user} onUpdate={onUpdate} onSuccessAndCloseModal={onClose} inModal={true} />
               </TabsContent>
               <TabsContent value="profile" className="h-full mt-0 border-0 p-0 outline-none w-full">
                 <UserProfileTab user={user} onUserUpdated={handleUserUpdate} />

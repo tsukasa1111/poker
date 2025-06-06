@@ -112,7 +112,7 @@ export default function AddUserDialog({ onUserAdded }: { onUserAdded?: () => voi
       }
     } catch (err: any) {
       console.error("ユーザー作成エラー:", err)
-      if (err.message && err.message.includes("already exists")) {
+      if (err.message && err.message.includes("このユーザー名は既に使用されています")) {
         setError(`ユーザーID「${username}」は既に使用されています。`)
         setValidationErrors((prev) => ({ ...prev, username: `ユーザーID「${username}」は既に使用されています。` }))
       } else {

@@ -84,7 +84,7 @@ export function UserProfileTab({ user, onUserUpdated }: UserProfileTabProps) {
           <AlertDescription>{success}</AlertDescription>
         </Alert>
       )}
-      <form onSubmit={handleProfileUpdate} className="space-y-6 flex flex-col flex-grow">
+      <form onSubmit={handleProfileUpdate} className="space-y-4 flex flex-col flex-grow">
         {" "}
         {/* space-y-6, flex flex-col flex-grow を追加 */}
         <div className="space-y-2">
@@ -94,7 +94,7 @@ export function UserProfileTab({ user, onUserUpdated }: UserProfileTabProps) {
           <Input
             id="username-profile"
             value={user.username}
-            className="bg-surface2 border-gray-600 text-text2 h-11 text-base"
+            className="bg-surface2 border-gray-600 text-text2 h-10 text-base"
             disabled
           />
           <p className="text-xs text-text2">ユーザー名は変更できません。</p>
@@ -107,7 +107,7 @@ export function UserProfileTab({ user, onUserUpdated }: UserProfileTabProps) {
             id="displayName-profile"
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
-            className="bg-surface2 border-gray-600 focus:border-accent text-text1 h-11 text-base"
+            className="bg-surface2 border-gray-600 focus:border-accent text-text1 h-10 text-base"
             required
           />
         </div>
@@ -121,16 +121,16 @@ export function UserProfileTab({ user, onUserUpdated }: UserProfileTabProps) {
             id="notes-profile"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            className="bg-surface2 border-gray-600 focus:border-accent text-text1 text-base flex-grow min-h-[120px]" // flex-grow と min-h を調整
+            className="bg-surface2 border-gray-600 focus:border-accent text-text1 text-base flex-grow min-h-[90px]" // flex-grow と min-h を調整
             rows={5} // rows を調整
           />
         </div>
-        <div className="mt-auto pt-4">
+        <div className="mt-auto pt-3">
           {" "}
           {/* mt-auto pt-4 でボタンを一番下に配置 */}
           <Button
             type="submit"
-            className="w-full btn-primary h-12 text-base font-semibold"
+            className="w-full btn-primary h-10 text-base font-semibold"
             disabled={loading || (user.displayName === displayName && user.notes === notes)} // 変更がない場合は無効化
           >
             {loading ? (
