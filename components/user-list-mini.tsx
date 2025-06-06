@@ -29,21 +29,26 @@ import {
 import { ChipManagementModal } from "./chip-management-modal"
 import { convertToCSV, formatJSON, downloadFile, generateFileName, downloadFileAlternative } from "@/lib/export-utils"
 import { toast } from "react-hot-toast"
-import { getAllUsers } from "@/lib/firestore"
-import { clearCache, getCacheStatus } from "@/lib/cache-utils"
+// import { getAllUsers } from "@/lib/firestore" // getAllUsers のインポートを削除
+import { clearCache } from "@/lib/cache-utils"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 import AddUserDialog from "@/components/add-user-dialog"
 
 interface UserListMiniProps {
+  users: User[] // 親から渡されるユーザーデータ
+  loading: boolean // 親から渡されるローディング状態
+  error: string | null // 親から渡されるエラー状態
+  lastUpdated: Date | null // 親から渡される最終更新日時
   onUserAdded?: () => void
 }
 
-export default function UserListMini({ onUserAdded }: UserListMiniProps) {
-  const [users, setUsers] = useState<User[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+export default function UserListMini({ users, loading, error, lastUpdated, onUserAdded }: UserListMiniProps) {
+  // ユーザーデータ、ローディング、エラー、最終更新日時はプロップスから受け取るため、内部状態を削除
+  // const [users, setUsers] = useState<User[]>([])
+  // const [loading, setLoading] = useState(true)
+  // const [error, setError] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
-  const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
+  // const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
   const [dataSource, setDataSource] = useState<string | null>(null)
   const [isOnline, setIsOnline] = useState(true)
   const [showExportMenu, setShowExportMenu] = useState(false)
@@ -60,13 +65,14 @@ export default function UserListMini({ onUserAdded }: UserListMiniProps) {
     "bg-[#fde047] text-black hover:bg-[#fcd34d] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#fde047]/50 focus-visible:ring-offset-bg rounded-md px-3 py-1.5 h-9 flex items-center gap-2"
 
   useEffect(() => {
-    loadUsers(false)
+    // ユーザーデータのロードは親コンポーネントで行われるため、ここでの loadUsers 呼び出しを削除
+    // loadUsers(false)
 
     setIsOnline(navigator.onLine)
     const handleOnline = () => {
       setIsOnline(true)
       toast.success("オンラインに復帰しました")
-      loadUsers(false)
+      // loadUsers(false) // 親からのデータ更新に任せる
     }
     const handleOffline = () => {
       setIsOnline(false)
@@ -81,29 +87,30 @@ export default function UserListMini({ onUserAdded }: UserListMiniProps) {
     }
   }, [])
 
-  const loadUsers = async (forceRefresh = false) => {
-    setLoading(true)
-    setError(null)
-    try {
-      const allUsers = await getAllUsers(forceRefresh)
-      setUsers(allUsers)
-      setLastUpdated(new Date())
-      const cacheInfo = getCacheStatus().find((item) => item.key === "all_users")
-      setDataSource(cacheInfo?.source || "unknown")
-      if (forceRefresh) {
-        toast.success("最新のユーザーデータを取得しました")
-      }
-    } catch (err: any) {
-      console.error("ユーザーデータの取得に失敗しました:", err)
-      setError(err.message || "ユーザーデータの取得に失敗しました")
-      toast.error("ユーザーデータの取得に失敗しました")
-    } finally {
-      setLoading(false)
-    }
-  }
+  // loadUsers 関数は不要になるため削除
+  // const loadUsers = async (forceRefresh = false) => {
+  //   setLoading(true)
+  //   setError(null)
+  //   try {
+  //     const allUsers = await getAllUsers(forceRefresh)
+  //     setUsers(allUsers)
+  //     setLastUpdated(new Date())
+  //     const cacheInfo = getCacheStatus().find((item) => item.key === "all_users")
+  //     setDataSource(cacheInfo?.source || "unknown")
+  //     if (forceRefresh) {
+  //       toast.success("最新のユーザーデータを取得しました")
+  //     }
+  //   } catch (err: any) {
+  //     console.error("ユーザーデータの取得に失敗しました:", err)
+  //     setError(err.message || "ユーザーデータの取得に失敗しました")
+  //     toast.error("ユーザーデータの取得に失敗しました")
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
 
   const handleUserAddedAndCloseModal = () => {
-    loadUsers(true)
+    // 新規ユーザー追加後、親コンポーネントに通知し、親がリアルタイムリスナーを通じてデータを更新する
     if (onUserAdded) {
       onUserAdded()
     }
@@ -113,7 +120,8 @@ export default function UserListMini({ onUserAdded }: UserListMiniProps) {
   const handleClearCacheAndRefresh = () => {
     clearCache("all_users")
     toast.success("ユーザーデータのキャッシュをクリアしました")
-    loadUsers(true)
+    // キャッシュクリア後、リアルタイムリスナーが自動的に最新データをフェッチする
+    // ここで明示的に loadUsers を呼び出す必要はない
     setShowFiltersMenu(false)
   }
 
@@ -149,10 +157,10 @@ export default function UserListMini({ onUserAdded }: UserListMiniProps) {
         return a.chips - b.chips
       } else if (currentSortCriterion === "updated_at_desc") {
         // updatedAtが未定義の場合は0として扱い、新しい順（降順）に並べる
-        return (b.updatedAt || 0) - (a.updatedAt || 0)
+        return (b.lastUpdated?.getTime() || 0) - (a.lastUpdated?.getTime() || 0) // DateオブジェクトのgetTime()を使用
       } else if (currentSortCriterion === "updated_at_asc") {
         // updatedAtが未定義の場合は0として扱い、古い順（昇順）に並べる
-        return (a.updatedAt || 0) - (b.updatedAt || 0)
+        return (a.lastUpdated?.getTime() || 0) - (b.lastUpdated?.getTime() || 0) // DateオブジェクトのgetTime()を使用
       }
       return 0 // 発生しないはず
     })
@@ -168,6 +176,8 @@ export default function UserListMini({ onUserAdded }: UserListMiniProps) {
   const handleCloseChipModal = () => {
     setIsChipModalOpen(false)
     setSelectedUser(null)
+    // チップ更新後、親コンポーネントのリアルタイムリスナーが自動的にデータを更新するため、
+    // ここで明示的に loadUsers を呼び出す必要はない
   }
 
   const exportAsCSV = () => {
@@ -244,6 +254,8 @@ export default function UserListMini({ onUserAdded }: UserListMiniProps) {
     : "なし"
 
   const getSourceInfo = () => {
+    // dataSource は UserListMini 内部で設定されないため、ここでは常に "不明" となるか、
+    // 親から渡す必要がある。今回は一旦そのままにしておく。
     switch (dataSource) {
       case "memory":
         return { icon: <Database className="h-3 w-3 mr-1" />, label: "メモリ", color: "text-purple-400" }
@@ -292,6 +304,7 @@ export default function UserListMini({ onUserAdded }: UserListMiniProps) {
               <AddUserDialog onUserAdded={handleUserAddedAndCloseModal} />
             </Dialog>
 
+            {/* dataSource は親から渡されるべきだが、ここでは一旦そのまま */}
             {dataSource && (
               <span className={`text-xs flex items-center ${sourceInfo.color}`}>
                 {sourceInfo.icon}
@@ -299,7 +312,7 @@ export default function UserListMini({ onUserAdded }: UserListMiniProps) {
               </span>
             )}
             <Button
-              onClick={() => loadUsers(false)}
+              onClick={() => clearCache("all_users")} // キャッシュクリアのみ行う
               disabled={loading}
               variant="ghost"
               size="sm"
@@ -483,7 +496,15 @@ export default function UserListMini({ onUserAdded }: UserListMiniProps) {
         user={selectedUser}
         isOpen={isChipModalOpen}
         onClose={handleCloseChipModal}
-        onUpdate={() => loadUsers(false)}
+        onUpdate={() => {
+          // 親コンポーネントのリアルタイムリスナーが更新を検知するため、
+          // ここで明示的にデータを再フェッチする必要はない。
+          // 必要であれば、親の onUserAdded を呼び出すことで、親の state を更新し、
+          // それが UserListMini の再レンダリングをトリガーする。
+          if (onUserAdded) {
+            onUserAdded()
+          }
+        }}
       />
     </SectionCard>
   )

@@ -17,7 +17,7 @@ import {
   recalculateAndStoreYearlyRanking,
   getStoredRanking,
 } from "@/lib/ranking-store"
-import { showToast } from "@/lib/toast" // ここを修正しました
+import { showToast } from "@/lib/toast"
 
 // 自動再計算の閾値（ミリ秒）。ここでは1時間（60分 * 60秒 * 1000ミリ秒）に設定
 const AUTO_RECALC_THRESHOLD = 60 * 60 * 1000
@@ -27,6 +27,8 @@ export default function DashboardPage() {
   const router = useRouter()
   const [authError, setAuthError] = useState<string | null>(null)
   const [firestoreInitialized, setFirestoreInitialized] = useState(false)
+  // refreshUserListTrigger は UserListMini がリアルタイムデータを受け取るため不要になりますが、
+  // 既存の onUserAdded の呼び出しを維持するために残しておきます。
   const [refreshUserListTrigger, setRefreshUserListTrigger] = useState(0)
 
   const {
@@ -134,6 +136,8 @@ export default function DashboardPage() {
   }, [user, firestoreInitialized]) // userとfirestoreInitializedが変更されたときに実行
 
   const handleUserAdded = () => {
+    // UserListMini がリアルタイムデータを受け取るため、このトリガーは直接的なデータ更新には不要ですが、
+    // 必要に応じてUIの再レンダリングなどをトリガーするために残しておきます。
     setRefreshUserListTrigger((prev) => prev + 1)
   }
 
@@ -192,9 +196,15 @@ export default function DashboardPage() {
         </Alert>
       )}
 
-      {/* UserListMini を先に表示 */}
+      {/* UserListMini にリアルタイムデータをプロップスとして渡す */}
       <div className="space-y-8 mb-8">
-        <UserListMini key={refreshUserListTrigger} onUserAdded={handleUserAdded} />
+        <UserListMini
+          users={realtimeUsers}
+          loading={usersLoading}
+          error={usersError}
+          lastUpdated={usersLastUpdated}
+          onUserAdded={handleUserAdded} // 新規ユーザー追加時のコールバックは維持
+        />
       </div>
 
       {/* KPIカードを UserListMini の下に表示 */}
