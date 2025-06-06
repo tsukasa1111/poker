@@ -1,0 +1,18 @@
+{
+  "rules": {
+    ".read": "auth != null",
+    ".write": "auth != null",
+    "users": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "chipHistory": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    },
+    "dailySummary": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    }
+  }
+}
